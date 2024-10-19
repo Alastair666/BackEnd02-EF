@@ -1,11 +1,15 @@
-import express from 'express';
+import express from 'express'
 import dotenv from 'dotenv'
-import { create } from 'express-handlebars';
+import { create } from 'express-handlebars'
 import connectDB from './config/database.config.js'
-import passport from 'passport';
+import passport from 'passport'
 import initializePassport from './config/passport.config.js'
-import cookieParser from 'cookie-parser';
-import __dirname, { ifEquals, inc } from "./utils.js"//Configuración Inicial
+import cookieParser from 'cookie-parser'
+//Configuración Inicial
+import productsRouter from './routes/products.route.js'
+import cartsRouter from "./routes/carts.route.js"
+import usersRouter from "./routes/users.route.js"
+import __dirname, { ifEquals, inc } from './utils.js'
 
 // Cargar variables de entorno desde el archivo .env
 dotenv.config({ path: './src/settings.env' });
@@ -38,7 +42,13 @@ app.use(cookieParser())
 initializePassport()
 app.use(passport.initialize())
 
+// Enlazando rutas para endpoints
+app.use("/api/products", productsRouter)
+app.use("/api/carts", cartsRouter)
+app.use("/api/users", usersRouter)
+
 // Ejecutando Servidor
 app.listen(PORT, ()=>{
+    console.clear()
     console.log(`Server running on port ${PORT}`)
 })

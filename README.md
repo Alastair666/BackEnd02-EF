@@ -44,7 +44,7 @@
 5. [Conclusiones](#conclusiones)
 
 ## Introducción
-Este proyecto es la primer pre-entrega final del curso "Programación Backend II: Diseño y Arquitectura Backend" de la plataforma Coderhouse.
+Este proyecto es la entrega final del curso "Programación Backend II: Diseño y Arquitectura Backend" de la plataforma Coderhouse.
 
 ## Instalación
 
