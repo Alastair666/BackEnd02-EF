@@ -54,11 +54,13 @@ export const getRegister = async(req, res, next) =>{
 export const getCurrent = async(req, res)=>{
     try {
         if (req.user){
-            res.status(200)
-            .json({
-                status: "success",
-                user: req.user
-            })
+            console.clear()
+            console.log(req.user)
+            const result = await UserService.getUserService().getUserById(req.user.id)
+            if (result)
+                res.status(200).json({ status: "success", user: result })//*/
+            else
+                res.send({ error: 'Error: '+req.error })
         }
         else
             res.send({ error: 'No autorizado: '+req.error })
@@ -77,11 +79,12 @@ export const getLoginUser = async(req, res, next) =>{
             res.cookie("jwt", token, { httpOnly: true, secure: false })
             console.log(`Token en user/login: ${token}`)
             res.send({ status: "success", user: {
-                id: user._id,
+                //id: user._id,
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                cart: user.cart
             } })
         }
         catch (ex){

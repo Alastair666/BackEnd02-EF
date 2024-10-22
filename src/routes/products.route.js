@@ -26,7 +26,7 @@ router.post('/',
         body('price').notEmpty().withMessage('El campo price es requerido'),
         body('stock').notEmpty().withMessage('El campo stock es requerido'),
         body('category').notEmpty().withMessage('El campo category es requerido')
-    ], createProduct
+    ], passportCall('jwt'), authorization('admin'), createProduct
 )
 /** PUT 
  * Deberá agregar un nuevo producto con los campos
@@ -40,18 +40,16 @@ router.put('/:pid',
         body('price').notEmpty().withMessage('El campo price es requerido'),
         body('stock').notEmpty().withMessage('El campo stock es requerido'),
         body('category').notEmpty().withMessage('El campo category es requerido')
-    ], updateProduct
+    ], passportCall('jwt'), authorization('admin'), updateProduct
 )
 /** PUT 
  * Deberá agregar actualizar el stock del producto
  * **/
-router.put('/:pid/quantity', 
-    manageStockProduct
-)
+router.put('/:pid/quantity', passportCall('jwt'), authorization('admin'), manageStockProduct)
 /** DELETE 
  * Deberá de traer solo el producto con el ID especificado
  * **/
-router.delete('/:pid', deleteProduct)
+router.delete('/:pid', passportCall('jwt'), authorization('admin'), deleteProduct)
 
 // Exportando puntos de acceso
 export default router

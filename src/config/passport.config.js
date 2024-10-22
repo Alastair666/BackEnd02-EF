@@ -26,14 +26,14 @@ const initializePassport = ()=>{
     }
     passport.use('jwt', new JWTStrategy(options, async(jwt_payload, done)=>{
         console.log('Entro a passport JWT')
-        console.log(jwt_payload)
+        //console.log(jwt_payload)
         try {
             const user = await UserService.getUserService().getUserById(jwt_payload.user.id)
             //console.log(user)
             if (!user) {
                 return done(null, false, { message: 'User not found' });
             }
-            return done(null, jwt_payload.user)
+            return done(null, user)//jwt_payload.user)
         } catch (error){
             console.error(error)
             return done(error)

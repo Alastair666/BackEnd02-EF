@@ -47,9 +47,15 @@ export default class ProductDB {
      * **/
     updateProduct = async(pid, product)=>{
         try {
-            const updateProduct = await productModel.findOne({ _id: pid}, { $set: product});
-            if (updateProduct)
+            const updateProduct = await productModel.findByIdAndUpdate(
+                { _id: pid}, 
+                { $set: product},
+                { new: true });
+            if (updateProduct) {
+                console.log(updateProduct)
                 return await productModel.findById(pid)
+            }
+                
             return null
         }
         catch  (error) {
