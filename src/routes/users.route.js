@@ -39,7 +39,7 @@ router.get('/faillogin', async (req, res) => {
  * Desc
  * **/
 // Ruta de validación de autenticación
-router.get('/current', passportCall('jwt'), authorization('user'), getCurrent)
+router.get('/current', passportCall('jwt'), authorization('admin'), getCurrent)
 /** GET 
  * Desc
  * **/

@@ -48,7 +48,40 @@ export default class ProductDB {
     updateProduct = async(pid, product)=>{
         try {
             const updateProduct = await productModel.findOne({ _id: pid}, { $set: product});
-            return updateProduct
+            if (updateProduct)
+                return await productModel.findById(pid)
+            return null
+        }
+        catch  (error) {
+            console.log(error)
+            return null
+        }
+    }
+    /**  
+     * Actualiza el stock del producto especificado
+     * **/
+    manageStockProduct = async(pid, quantity, add, reduce)=>{
+        try {
+            let stock = 0
+            let product = await productModel.findById(pid)
+            if (product) {
+                stock = product.stock
+                if (add === true && reduce === false) stock = product.stock + quantity
+                else if (add === false && reduce === true) {
+                    //Validando Stock
+                    if (quantity <= product.stock)
+                        stock = product.stock - quantity
+                }
+            } else return null
+            //Actualizando el stock
+            const updateProduct = await productModel.findByIdAndUpdate(
+                pid, 
+                { stock: stock},
+                { new: true }
+            )
+            if (updateProduct)
+                return updateProduct
+            return null
         }
         catch  (error) {
             console.log(error)

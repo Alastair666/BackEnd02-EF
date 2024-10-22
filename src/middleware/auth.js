@@ -51,7 +51,6 @@ export const authorization = (role) => {
 
             if (req.user.role !== role) 
                 return res.status(403).send({ error: "No permission" })
-    
             next()
         } catch (err) {
             return res.status(401).json({ message: 'Invalid Token.' });

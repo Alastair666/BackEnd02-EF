@@ -1,9 +1,8 @@
 import passport from "passport"
 import { Strategy as LocalStrategy } from 'passport-local'
 import UserService from '../services/user.service.js'
-import CartService from '../services/cart.service.js'
 import jwt from "passport-jwt"
-import { createHash, isValidPassword } from '../middleware/auth.js'
+import { isValidPassword } from '../middleware/auth.js'
 
 // Cargar variables de entorno
 const JWTStrategy = jwt.Strategy
@@ -64,7 +63,7 @@ const initializePassport = ()=>{
                     //console.log(user)
                     if (user)
                         return done(null, false, { message: `This email '${username}' is already in use` })
-                    else 
+                    else
                         console.warn(`This email '${username}' is not in use`)
 
                     //Creando registro de usuario
@@ -77,9 +76,7 @@ const initializePassport = ()=>{
                         role: role
                     }
                     let result = await UserService.getUserService().createUser(newUser)
-
-
-                    return done(null, newUser)
+                    return done(null, result)
                 } else {
                     return done(null, false, { message: msj_error })
                 }
@@ -106,8 +103,6 @@ const initializePassport = ()=>{
             console.error(err)
             return done(err)
         }
-
-        
     }))
     passport.serializeUser((user, done)=>{
         done(null, user._id)

@@ -1,7 +1,8 @@
 import { Router } from 'express'
 import { body } from "express-validator"
-import { getProducts, getProductById, createProduct, updateProduct, deleteProduct }
+import { getProducts, getProductById, createProduct, updateProduct, deleteProduct, manageStockProduct }
         from '../controllers/product.controller.js'
+import { authorization, passportCall } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -40,6 +41,12 @@ router.put('/:pid',
         body('stock').notEmpty().withMessage('El campo stock es requerido'),
         body('category').notEmpty().withMessage('El campo category es requerido')
     ], updateProduct
+)
+/** PUT 
+ * Deberá agregar actualizar el stock del producto
+ * **/
+router.put('/:pid/quantity', 
+    manageStockProduct
 )
 /** DELETE 
  * Deberá de traer solo el producto con el ID especificado

@@ -68,14 +68,15 @@ export default class User {
             let updatedUser = {
                 first_name : user.first_name, 
                 last_name : user.last_name, 
-                email: user.username,
+                email: user.email,
                 age: user.age, 
-                password: createHash(password),
-                role : user.role,
-                cart: newUserCart._id
+                password: createHash(user.password),
+                role : user.role
             }
-            let retorno = await userModel.updateOne({ _id: uid }, { $set: updatedUser })
-            return retorno
+            let result = await userModel.updateOne({ _id: uid }, { $set: updatedUser })
+            if (result)
+                return await userModel.findById(uid)
+            return null
         }
         catch (error) {
             console.error(error)

@@ -98,17 +98,18 @@ export const updateUser = async(req,res)=>{
         // Obteniendo ID del producto y parametros para actualizar
         let { uid } = req.params
         let user = req.body
-        console.log(user)
         let userToReplace = {
             id: user._id,
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,
             password: user.password,
+            age: user.age,
             role: user.role
         }
         // Editando usuario en BD
         const result = await UserService.getUserService().updateUser(uid, userToReplace)
+        //console.log(result)
         if (result) 
             res.status(200).json({ result: "success", payload: result })
         else 
