@@ -1,5 +1,7 @@
-import cartsModel from '../models/cart.model.js'
 import userModel from '../models/user.model.js'
+import cartModel from '../models/cart.model.js'
+import productModel from '../models/product.model.js'
+import ticketModel from '../models/ticket.model.js'
 
 export default class CartDB {
     /**  
@@ -7,16 +9,20 @@ export default class CartDB {
      * **/
     getUserCart = async(uid)=>{
         try {
-            const userCart = await userModel.findOne({ _id: uid })
+            const userCart = await userModel.findById(uid)
+            //console.log(userCart)
             if (userCart) {
-                const cart = await cartsModel.findOne({ _id: userCart.cart })
+                const cart = await cartModel.findById(userCart.cart)
+                //console.log(cart)
                 if (cart) 
                     return cart
+                else throw new Error("Can't find the user-cart by ID:"+userCart.cart)
             }
+            else throw new Error("Can't find the user by ID:"+uid)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error('Error get User Cart: ' + error.message)
         }
     }
     /**  
@@ -24,12 +30,14 @@ export default class CartDB {
      * **/
     getCartById = async(cid)=>{
         try {
-            const cart = await cartsModel.findOne({ _id: cid })
-            return cart
+            const cart = await cartModel.findById(cid)
+            if (cart)
+                return cart
+            else throw new Error("Can't find the cart by ID:"+cid)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error('Error get Cart: ' + error.message)
         }
     }
     /**  
@@ -37,12 +45,14 @@ export default class CartDB {
      * **/
     createUserCart = async(user)=>{
         try {
-            let result = await cartsModel.create({ user: user, products: []})
-            return result
+            let result = await cartModel.create({ user: user, products: []})
+            if (result)
+                return result
+            else throw new Error("Can't create the cart by user:"+user.email)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error('Error create Cart: ' + error.message)
         }
     }
     /**  
@@ -50,16 +60,20 @@ export default class CartDB {
      * **/
     putProductsInCart = async(cid, products)=>{
         try {
-            const cart = await cartsModel.findOne({ _id: cid })
+            console.log(`Cart ID: ${cid}`)
+            const cart = await cartModel.findById(cid)
             if (cart) {
                 cart.products = products
                 let result = await cart.save()
-                return result
+                if (result)
+                    return result
+                else throw new Error("Can't update the products of the cart by ID:"+cid)
             }
+            else throw new Error("Can't find the cart by ID:"+cid)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error('Error update Cart: ' + error.message)
         }
     }
     /**  
@@ -67,28 +81,38 @@ export default class CartDB {
      * **/
     putQuantityProductsInCart = async(cid, pid, quantity)=>{
         try {
-            const cart = await cartsModel.findOne({ _id: cid })
+            const cart = await cartModel.findOne({ _id: cid })
             if (cart) {
-                let prod_idx = cart.products.findIndex(p=> p.product.toString() === pid)
-                if (prod_idx != -1){
-                    cart.products[prod_idx].quantity = quantity
-                    let result = await cart.save()
-                    return result
-                }
-                else if (prod_idx == -1) {
-                    const newProd = {
-                        product :  pid,
-                        quantity : quantity
+                //Obteniendo Producto
+                let product = await productModel.findById(pid)
+                if (product) {
+                    //Validando Cantidad en Stock
+                    console.log(`Product:\nStock BD=${product.stock}\nQuantity=${quantity}`)
+                    if (product.stock >= quantity) {
+                        let prod_idx = cart.products.findIndex(p=> p.product.toString() === pid)
+                        if (prod_idx != -1)
+                            cart.products[prod_idx].quantity = quantity
+                        else if (prod_idx == -1) {
+                            const newProd = {
+                                product :  pid,
+                                quantity : quantity
+                            }
+                            cart.products.push(newProd)
+                        }
+                        else throw new Error("Can't find the product's cart")
+                        //Guardando Cambios
+                        let result = await cart.save()
+                        return result
                     }
-                    cart.products.push(newProd)
-                    let result = await cart.save()
-                    return result
+                    else throw new Error("The available quantity of the product inventory cannot supply the cart order")
                 }
+                else throw new Error("Can't find the cart by ID:"+cid)
             }
+            else throw new Error("Can't find the cart by ID:"+cid)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error('Error update Cart: ' + error.message)
         }
     }
     /**  
@@ -96,16 +120,17 @@ export default class CartDB {
      * **/
     deleteCartProducts = async(cid)=>{
         try {
-            const cart = await cartsModel.findOne({ _id: cid })
+            const cart = await cartModel.findOne({ _id: cid })
             if (cart) {
                 cart.products = []
                 let result = await cart.save()
                 return result
             }
+            else throw new Error("Can't find the cart by ID:"+cid)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error('Error delete Cart: ' + error.message)
         }
     }
     /**  
@@ -113,7 +138,7 @@ export default class CartDB {
      * **/
     deleteCartProduct = async(cid, pid)=>{
         try {
-            const cart = await cartsModel.findOne({ _id: cid })
+            const cart = await cartModel.findOne({ _id: cid })
             if (cart) {
                 const prod_idx = cart.products.findIndex(p=> p.product.toString() === pid)
                 if (prod_idx != -1) {
@@ -121,11 +146,44 @@ export default class CartDB {
                     let result = await cart.save()
                     return result
                 }
+                else throw new Error(`Can't find the product by ID: ${pid} in the cart by ID: ${cid}`)
             }
+            else throw new Error("Can't find the cart by ID:"+cid)
         }
         catch (error){
             console.log(error)
-            return null
+            throw new Error("Error delete Product's Cart: " + error.message)
+        }
+    }
+    /**  
+     * Crea el registro de compra en base a los productos del carrito
+     * **/
+    purchaseCart  = async(cid)=>{
+        try {
+            let result = false
+            const products = []
+            const cart = await cartModel.findOne({ _id: cid })
+            if (cart) {
+                for (const product of cart.products) {
+                    let prod = await productsModel.findById(product.pid)
+                    if (prod) {
+                        if (prod.stock >= product.quantity)
+                            products.push({ p: prod, c: product })
+                    }
+                    else throw new Error("Can't find the product by ID:"+product.pid)
+                }
+            }
+            else throw new Error("Can't find the cart by ID:"+cid)
+
+            //Validando si hay productos disponibles
+            console.log(products)
+            if (products.length > 0){
+                //
+            }
+        }
+        catch (error) {
+            console.log(error)
+            throw new Error("Error Purchase Cart: " + error.message)
         }
     }
 }

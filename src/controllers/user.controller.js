@@ -79,7 +79,7 @@ export const getLoginUser = async(req, res, next) =>{
             res.cookie("jwt", token, { httpOnly: true, secure: false })
             console.log(`Token en user/login: ${token}`)
             res.send({ status: "success", user: {
-                //id: user._id,
+                id: user._id,
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
@@ -112,6 +112,26 @@ export const updateUser = async(req,res)=>{
         }
         // Editando usuario en BD
         const result = await UserService.getUserService().updateUser(uid, userToReplace)
+        //console.log(result)
+        if (result) 
+            res.status(200).json({ result: "success", payload: result })
+        else 
+            res.status(400).json({ result: "error", errors: "Can't create the user" })
+    }
+    catch (ex){
+        res.status(500).json({ result: "error", errors: ex })
+    }
+}
+export const deleteUser = async(req,res)=>{
+    try {
+        const errores = validationResult(req);
+        if (!errores.isEmpty()) {
+            return res.status(400).json({ result: "error", errors: errores.array() });
+        }
+        // Obteniendo ID del producto y parametros para actualizar
+        let { uid } = req.params
+        // Editando usuario en BD
+        const result = await UserService.getUserService().deleteUser(uid)
         //console.log(result)
         if (result) 
             res.status(200).json({ result: "success", payload: result })

@@ -11,7 +11,7 @@ export default class ProductDB {
         }
         catch  (error) {
             console.log(error)
-            return null
+            throw new Error('Error create Product: ' + error.message)
         }
     }
     /**  
@@ -24,7 +24,7 @@ export default class ProductDB {
         }
         catch  (error) {
             console.log(error)
-            return null
+            throw new Error('Error get Product: ' + error.message)
         }
     }
     /**  
@@ -39,7 +39,7 @@ export default class ProductDB {
         }
         catch  (error) {
             console.log(error)
-            return null
+            throw new Error('Error get Products: ' + error.message)
         }
     }
     /**  
@@ -55,12 +55,11 @@ export default class ProductDB {
                 console.log(updateProduct)
                 return await productModel.findById(pid)
             }
-                
-            return null
+            else throw new Error("Can't update the product by ID:"+pid)
         }
         catch  (error) {
             console.log(error)
-            return null
+            throw new Error('Error update Product: ' + error.message)
         }
     }
     /**  
@@ -78,7 +77,7 @@ export default class ProductDB {
                     if (quantity <= product.stock)
                         stock = product.stock - quantity
                 }
-            } else return null
+            } else throw new Error("Can't find the product by ID:"+pid)
             //Actualizando el stock
             const updateProduct = await productModel.findByIdAndUpdate(
                 pid, 
@@ -87,11 +86,11 @@ export default class ProductDB {
             )
             if (updateProduct)
                 return updateProduct
-            return null
+            else throw new Error("Can't update the product by ID:"+pid)
         }
         catch  (error) {
             console.log(error)
-            return null
+            throw new Error('Error manage Product: ' + error.message)
         }
     }
     /**  
@@ -104,10 +103,11 @@ export default class ProductDB {
                 let result = await product.deleteOne({ _id: pid })
                 return result
             }
+            else throw new Error("Can't update the product by ID:"+pid)
         }
         catch  (error) {
             console.log(error)
-            return null
+            throw new Error('Error delete Product: ' + error.message)
         }
     }
 }

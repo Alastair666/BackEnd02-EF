@@ -45,7 +45,10 @@ router.put('/:pid',
 /** PUT 
  * Deberá agregar actualizar el stock del producto
  * **/
-router.put('/:pid/quantity', passportCall('jwt'), authorization('admin'), manageStockProduct)
+router.put('/:pid/quantity',
+    [
+        body('quantity').notEmpty().withMessage('El campo quantity es requerido')
+    ], passportCall('jwt'), authorization('admin'), manageStockProduct)
 /** DELETE 
  * Deberá de traer solo el producto con el ID especificado
  * **/

@@ -1,14 +1,19 @@
 import { validationResult } from 'express-validator'
 import ProductService from '../services/product.service.js'
 
-export const getProducts = async(req,res)=>{
+export const createProduct = async(req,res)=>{
     try {
-        let limit = parseInt(req.query.limit)
-        const result = await ProductService.getProductService().getProducts(limit)
+        const errores = validationResult(req);
+        if (!errores.isEmpty()) {
+            return res.status(400).json({ result: "error", errors: errores.array() });
+        }
+        const newProduct = req.body
+        // Insertando producto en BD
+        const result = await ProductService.getProductService().createProduct(newProduct)
         if (result) 
             res.status(200).json({ result: "success", payload: result })
         else 
-            res.status(400).json({ result: "error", errors: "No products here" })
+            res.status(400).json({ result: "error", errors: "Can't create the product" })
     }
     catch (ex){
         res.status(500).json({ result: "error", errors: ex })
@@ -27,19 +32,14 @@ export const getProductById = async(req,res)=>{
         res.status(500).json({ result: "error", errors: ex })
     }
 }
-export const createProduct = async(req,res)=>{
+export const getProducts = async(req,res)=>{
     try {
-        const errores = validationResult(req);
-        if (!errores.isEmpty()) {
-            return res.status(401).json({ result: "error", errors: errores.array() });
-        }
-        const newProduct = req.body
-        // Insertando producto en BD
-        const result = await ProductService.getProductService().createProduct(newProduct)
+        let limit = parseInt(req.query.limit)
+        const result = await ProductService.getProductService().getProducts(limit)
         if (result) 
             res.status(200).json({ result: "success", payload: result })
         else 
-            res.status(400).json({ result: "error", errors: "Can't create the product" })
+            res.status(400).json({ result: "error", errors: "No products here" })
     }
     catch (ex){
         res.status(500).json({ result: "error", errors: ex })

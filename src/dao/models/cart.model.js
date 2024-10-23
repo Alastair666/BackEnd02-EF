@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 // Definiendo Colección de Carritos
-const cartsSchema = mongoose.Schema({
+const cartSchema = mongoose.Schema({
     products: {
         type:[
             {
@@ -17,5 +17,5 @@ const cartsSchema = mongoose.Schema({
 })
 
 // Exportando modelo de carritos
-const productsModel = mongoose.model("carts", cartsSchema)
-export default productsModel
+const cartService = mongoose.model("carts", cartSchema)
+export default cartService

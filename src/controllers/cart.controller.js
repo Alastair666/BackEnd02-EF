@@ -1,12 +1,15 @@
 import { validationResult } from 'express-validator'
 import CartService from '../services/cart.service.js'
+import ProductService from '../services/product.service.js'
+import OrderService from '../services/order.service.js'
 
 export const getUserCart = async(req,res)=>{
     try {
         const cart_uid = req.params.uid
+        console.log(`User ID: ${cart_uid}`)
         if (cart_uid) {
-            const userCart = await CartService.getCartService().getUserCart(cart_uid)
-            if (userCart) {
+            const cart = await CartService.getCartService().getUserCart(cart_uid)
+            if (cart) {
                 res.status(200).json({ result: "success", payload: cart })
             }
             else {
@@ -15,12 +18,15 @@ export const getUserCart = async(req,res)=>{
         }
     }
     catch (error) {
+        console.error(error)
         res.status(500).json({ result: "error", errors: error })
     }
 }
 export const getCartById = async(req,res)=>{
+    console.log(req.params)
     try {
-        const cart_cid = req.params.uid
+        const cart_cid = req.params.cid
+        console.log(`Cart ID: ${cart_cid}`)
         if (cart_cid) {
             const cart = await CartService.getCartService().getCartById(cart_cid)
             if (cart) {
@@ -32,8 +38,9 @@ export const getCartById = async(req,res)=>{
         }
     }
     catch (error) {
+        console.error(error)
         res.status(500).json({ result: "error", errors: error })
-    }
+    }//*/
 }
 export const createUserCart = async(req,res)=>{
     try {
@@ -109,6 +116,33 @@ export const deleteCartProduct = async(req,res)=>{
         // Eliminando producto del carrito
         let result = await CartService.getCartService().deleteCartProduct(cart_cid, prod_pid)
         res.send({ result: "success", payload: result})
+    }
+    catch (error) {
+        res.status(500).json({ result: "error", errors: error })
+    }
+}
+export const purchaseCart = async(req,res)=>{
+    try {
+        let products = []
+        const cart_cid = req.params.cid
+        const cart = await CartService.getCartService().getCartById(cart_cid)
+        if (cart) {
+            for (const product of cart.products) {
+                let prod = await ProductService.getCartService().getProductById(product.pid)
+                if (prod) {
+                    if (prod.stock >= product.quantity)
+                        products.push({ p: prod, c: product })
+                }
+                else throw new Error("Can't find the product by ID:"+product.pid)
+            }
+        }
+        else throw new Error("Can't find the cart by ID:"+cid)
+
+        //Validando si hay productos disponibles
+        console.log(products)
+        if (products.length > 0){
+            //
+        }
     }
     catch (error) {
         res.status(500).json({ result: "error", errors: error })

@@ -10,7 +10,7 @@ export default class User {
             const newUser = await userModel.create({
                 first_name : user.first_name, 
                 last_name : user.last_name, 
-                email: user.username,
+                email: user.email,
                 age: user.age, 
                 password: createHash(user.password),
                 role : user.role,
@@ -81,6 +81,23 @@ export default class User {
         catch (error) {
             console.error(error)
             return null
+        }
+    }
+    /**  
+     * Elimina los productos del carrito especificado
+     * **/
+    deleteUser = async(uid)=>{
+        try {
+            const user = await await userModel.findById(uid)
+            if (user) {
+                const result = await userModel.deleteOne({ _id: uid })
+                return result
+            }   
+            else throw new Error("Can't find the user by ID:"+cid)
+        }
+        catch (error){
+            console.log(error)
+            throw new Error('Error delete Cart: ' + error.message)
         }
     }
 }

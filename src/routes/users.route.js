@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { body } from "express-validator"
-import { getUserById, getRegister, getLoginUser, updateUser, getCurrent }
+import { getUserById, getRegister, getLoginUser, updateUser, getCurrent, deleteUser }
         from '../controllers/user.controller.js'
 import { authorization, passportCall } from '../middleware/auth.js'
 
@@ -63,9 +63,12 @@ router.put('/:uid',
         body('email').notEmpty().withMessage('Email is required'),
         body('password').notEmpty().withMessage('Password is required'),
         body('role').notEmpty().withMessage('Role is required')
-    ],
+    ], passportCall('jwt'), authorization('admin'),
     updateUser
 )
-
+/** DELETE 
+ * Deberá de eliminar el usuario
+ * **/
+router.delete('/:uid', passportCall('jwt'), authorization('admin'), deleteUser)
 // Exportando puntos de acceso
 export default router
