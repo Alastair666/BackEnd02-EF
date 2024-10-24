@@ -17,7 +17,7 @@ export const createUser = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't create the user" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const getUserById = async(req,res)=>{
@@ -31,7 +31,7 @@ export const getUserById = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't find the user" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const getRegister = async(req, res, next) =>{
@@ -47,7 +47,7 @@ export const getRegister = async(req, res, next) =>{
             res.send({ status: "success", user })
         }
         catch (ex){
-            res.status(500).json({ result: "error", errors: ex })
+            res.status(400).json({ result: "error", errors: ex.message })
         }
     })(req, res, next)
 }
@@ -66,7 +66,7 @@ export const getCurrent = async(req, res)=>{
             res.send({ error: 'No autorizado: '+req.error })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const getLoginUser = async(req, res, next) =>{
@@ -88,7 +88,7 @@ export const getLoginUser = async(req, res, next) =>{
             } })
         }
         catch (ex){
-            res.status(500).json({ result: "error", errors: ex })
+            res.status(400).json({ result: "error", errors: ex.message })
         }
     })(req, res, next)
 }
@@ -119,7 +119,7 @@ export const updateUser = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't create the user" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const deleteUser = async(req,res)=>{
@@ -139,6 +139,6 @@ export const deleteUser = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't create the user" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }

@@ -1,6 +1,7 @@
 import userModel from '../models/user.model.js'
 import cartModel from '../models/cart.model.js'
 import productModel from '../models/product.model.js'
+import orderModel from '../models/order.model.js'
 import ticketModel from '../models/ticket.model.js'
 
 export default class CartDB {
@@ -111,7 +112,7 @@ export default class CartDB {
             else throw new Error("Can't find the cart by ID:"+cid)
         }
         catch (error){
-            console.log(error)
+            //console.log(error)
             throw new Error('Error update Cart: ' + error.message)
         }
     }
@@ -160,29 +161,80 @@ export default class CartDB {
      * **/
     purchaseCart  = async(cid)=>{
         try {
-            let result = false
-            const products = []
+            const products_to_purchase = [], products_no_stock = []
             const cart = await cartModel.findOne({ _id: cid })
+            const user =  await userModel.findOne({ cart: cart._id })
             if (cart) {
+                //console.log(user)
                 for (const product of cart.products) {
-                    let prod = await productsModel.findById(product.pid)
+                    //console.log(cart)
+                    let prod = await productModel.findById(product.product)
                     if (prod) {
                         if (prod.stock >= product.quantity)
-                            products.push({ p: prod, c: product })
+                            products_to_purchase.push({ p: prod, c: product })
+                        else
+                            products_no_stock.push(product)
                     }
-                    else throw new Error("Can't find the product by ID:"+product.pid)
+                    else throw new Error("Can't find the product by ID:"+product.product)
                 }
             }
             else throw new Error("Can't find the cart by ID:"+cid)
 
+            console.log(`Products to Purchase: ${products_to_purchase.length}\nProducts no Stock: ${products_no_stock.length}`)
             //Validando si hay productos disponibles
-            console.log(products)
-            if (products.length > 0){
-                //
+            if (products_to_purchase.length > 0){
+                //Obteniendo datos
+                const amount =  products_to_purchase.reduce((acc, prod) => {
+                    acc.sum += prod.p.price
+                    acc.product += prod.c.quantity * prod.p.price
+                    return acc
+                }, { sum: 0, product: 0 })
+
+                const ticket  = await ticketModel.create({
+                    amount: amount.product,
+                    purchaser: user.email
+                })
+                if (ticket) {
+                    console.log(`Ticket: ${ticket}`)
+                    const details = products_to_purchase.reduce((acc, product)=>{
+                        acc.push({ 
+                            product: product.p._id, 
+                            quantity: product.c.quantity, 
+                            unit_price: product.p.price
+                        })
+                        return acc
+                    },[])
+                    const orders =  await orderModel.create({
+                        ticket: ticket._id,
+                        details: details
+                    })
+
+                    let result = true
+                    //Actualizando Carrito con los productos que no se pudieron comprar
+                    const cart = await cartModel.findByIdAndUpdate(cid, { products: products_no_stock }, { new: true})
+                    if (!cart) result = false
+                    
+                    if (result) {
+                        //Actualizando Stock del Productos
+                        for (const product of products_to_purchase) {
+                            let prod  = await productModel.findByIdAndUpdate(
+                                product.p._id, 
+                                { stock: product.p.stock - product.c.quantity },
+                                { new: true})
+                            if (!prod)
+                                throw new Error("Can't update the product stock")
+                        }
+                    }
+                    else throw new Error("Can't update the product stock")
+                    //Devolviendo resultado de la Operación
+                    return { t: ticket, o: orders }
+                }
+                else throw new Error("Can't create de ticket")
             }
+            else throw new Error("There's no avaible product to purchase in the stock")
         }
         catch (error) {
-            console.log(error)
+            //console.log(error)
             throw new Error("Error Purchase Cart: " + error.message)
         }
     }

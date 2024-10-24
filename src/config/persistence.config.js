@@ -7,5 +7,7 @@ export default {
     persistence: process.env.PERSISTENCE,
     port: process.env.PORT,
     jwt_secret: process.env.JWT_SECRET,
-    database: process.env.MONGODB_URI
+    database: process.env.MONGODB_URI,
+    sender: process.env.EMAIL_SENDER,
+    attempts: process.env.ATTEMPTS,
 }

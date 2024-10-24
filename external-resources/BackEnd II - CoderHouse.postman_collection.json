@@ -1,0 +1,565 @@
+{
+	"info": {
+		"_postman_id": "6d3c723d-9fb5-4fda-a838-7f21a9eac6e7",
+		"name": "BackEnd II - CoderHouse",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7998427"
+	},
+	"item": [
+		{
+			"name": "EFinal",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"first_name\" : \"Alastair\", \r\n    \"last_name\" : \"Blackwell\", \r\n    \"email\" : \"alastair.blackwell@gmail.com\",\r\n    \"password\" : \"psswrd24TECTOS\",\r\n    \"age\" : 33, \r\n    \"role\" : \"user\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/users/register",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"alastair.blackwell@gmail.com\",\r\n    \"password\" : \"psswrd24TECTOS\"\r\n    /*\"email\" : \"iruiz@tectos.com.mx\",\r\n    \"password\" : \"psswrd24TECTOS\"*/\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/users/login",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/users/67195a18a7a8b7a3f9a0d6c8",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"67195a18a7a8b7a3f9a0d6c8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOTQ3MWJjYzA0ZjQxZDk2MzE5YzU5IiwiZmlyc3RfbmFtZSI6IkNhcmxvcyBFbHJvbmQiLCJsYXN0X25hbWUiOiJMaW3Ds24gT2x2ZXJhIiwiZW1haWwiOiJjbGltb25AdGVjdG9zLmNvbS5teCIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE3Mjk3MDk5MjIsImV4cCI6MTcyOTc5NjMyMn0.keq7bv4JJhn-VQCVGCq2c-OV1I0vcbuA6E0iVaHXWss",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"first_name\" : \"Jorge Iván\", \r\n    \"last_name\" : \"Ruíz Ramírez\", \r\n    \"email\" : \"iruiz@tectos.com.mx\",\r\n    \"password\" : \"psswrd24TECTOS\",\r\n    \"age\" : 43, \r\n    \"role\" : \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/users/671940b63c543156a22c5e4b",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"671940b63c543156a22c5e4b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZlZTcwODU4ZWUxMDhiMWI1YjY0ZjNhIiwiZmlyc3RfbmFtZSI6IkNhcmxvcyBFbHJvbmQiLCJsYXN0X25hbWUiOiJMaW3Ds24gT2x2ZXJhIiwiZW1haWwiOiJjbGltb25AdGVjdG9zLmNvbS5teCIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE3Mjk3MDc5NDQsImV4cCI6MTcyOTc5NDM0NH0.jOdAQv6qI0fqYV2B1MPXreZP_ODwhMjc9JBmuJUfBOo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/users/66ee704e8ee108b1b5b64f2b",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"66ee704e8ee108b1b5b64f2b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Current",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOTVhMThhN2E4YjdhM2Y5YTBkNmM4IiwiZmlyc3RfbmFtZSI6IkNhcmxvcyBFbHJvbmQiLCJsYXN0X25hbWUiOiJMaW3Ds24gT2x2ZXJhIiwiZW1haWwiOiJjbGltb25AdGVjdG9zLmNvbS5teCIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE3Mjk3MTUwNDEsImV4cCI6MTcyOTgwMTQ0MX0.gMV782Lkl7KwNLluP--aW5ugCzNRITpDUGE_ohMWGHM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/users/current",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"current"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Get All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/products",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/products/671856fe37435094a6f95c99",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"products",
+										"671856fe37435094a6f95c99"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZlZTcwODU4ZWUxMDhiMWI1YjY0ZjNhIiwiZmlyc3RfbmFtZSI6IkNhcmxvcyBFbHJvbmQiLCJsYXN0X25hbWUiOiJMaW3Ds24gT2x2ZXJhIiwiZW1haWwiOiJjbGltb25AdGVjdG9zLmNvbS5teCIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE3Mjk2MzE4MTEsImV4cCI6MTcyOTcxODIxMX0.ELfItgFlu7w5zXaeq44ELcxFplHhwTVFYSWPULLO2lo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"ThinkPad E83\",\r\n    \"description\": \"Laptop\",\r\n    \"code\": \"312T6CA\",\r\n    \"price\": \"8243.70\",\r\n    \"status\": true,\r\n    \"stock\": 710,\r\n    \"category\": \"laptop.lenovo.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/products",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Prod",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZlZTcwODU4ZWUxMDhiMWI1YjY0ZjNhIiwiZmlyc3RfbmFtZSI6IkNhcmxvcyBFbHJvbmQiLCJsYXN0X25hbWUiOiJMaW3Ds24gT2x2ZXJhIiwiZW1haWwiOiJjbGltb25AdGVjdG9zLmNvbS5teCIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE3Mjk2MzE4MTEsImV4cCI6MTcyOTcxODIxMX0.ELfItgFlu7w5zXaeq44ELcxFplHhwTVFYSWPULLO2lo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"ThinkPad E83 1\",\r\n    \"description\": \"Laptop 1\",\r\n    \"code\": \"312T6CA\",\r\n    \"price\": \"9343.70\",\r\n    \"status\": true,\r\n    \"stock\": 710,\r\n    \"category\": \"laptop.lenovo.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/products/671856fe37435094a6f95c99",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"products",
+										"671856fe37435094a6f95c99"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manage Quantity",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZlZTcwNGU4ZWUxMDhiMWI1YjY0ZjJiIiwiZmlyc3RfbmFtZSI6Ikl2YW4iLCJsYXN0X25hbWUiOiJSdWl6IiwiZW1haWwiOiJpcnVpekB0ZWN0b3MuY29tLm14Iiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzI5NzAxNzMyLCJleHAiOjE3Mjk3ODgxMzJ9.4CbUkUYbo6rhj442-I90JSYGLp1mT8LS_IRUFdflUVs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantity\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/products/671856fe37435094a6f95c99/quantity",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"products",
+										"671856fe37435094a6f95c99",
+										"quantity"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cart",
+					"item": [
+						{
+							"name": "Get User Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOTQ3NWNjYzA0ZjQxZDk2MzE5YzVlIiwiZmlyc3RfbmFtZSI6Ikplc3NpY2EiLCJsYXN0X25hbWUiOiJIZXJyZXJhIiwiZW1haWwiOiJqaGVycmVyYUB0ZWN0b3MuY29tLm14Iiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzI5NzEzNjIwLCJleHAiOjE3Mjk4MDAwMjB9.3b81Zi2e1bpZTRO3llSDyv8-LSm_A3287uA_0ytA-uY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/carts/user/67195a18a7a8b7a3f9a0d6c8",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"user",
+										"67195a18a7a8b7a3f9a0d6c8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOWQ3MTIzYmEzZjY3OGVjNDc5MzAyIiwiZmlyc3RfbmFtZSI6IkFsYXN0YWlyIiwibGFzdF9uYW1lIjoiQmxhY2t3ZWxsIiwiZW1haWwiOiJhbGFzdGFpci5ibGFja3dlbGxAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzI5NzQ2NzMyLCJleHAiOjE3Mjk4MzMxMzJ9.tFgZJPZKA9oqnXEgcUNyKqPaUsU0zQ52LUUZ-tOm-9E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/carts/6719d7123ba3f678ec479300",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"6719d7123ba3f678ec479300"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Products Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOTVhMzVhN2E4YjdhM2Y5YTBkNmNkIiwiZmlyc3RfbmFtZSI6IlJvYmVydG8iLCJsYXN0X25hbWUiOiJHb21leiIsImVtYWlsIjoicmdvbWV6QHRlY3Rvcy5jb20ubXgiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE3Mjk3NDE5NzQsImV4cCI6MTcyOTgyODM3NH0.dZK4NQxefsUQds18MSbiREAQ4GVDzdvFe7uwlqe-8HU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/carts/6719d7123ba3f678ec479300",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"6719d7123ba3f678ec479300"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Products Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOWQ3MTIzYmEzZjY3OGVjNDc5MzAyIiwiZmlyc3RfbmFtZSI6IkFsYXN0YWlyIiwibGFzdF9uYW1lIjoiQmxhY2t3ZWxsIiwiZW1haWwiOiJhbGFzdGFpci5ibGFja3dlbGxAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzI5NzQ2NzMyLCJleHAiOjE3Mjk4MzMxMzJ9.tFgZJPZKA9oqnXEgcUNyKqPaUsU0zQ52LUUZ-tOm-9E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"product\": \"66ebbbbde2b08ca1b5545f44\",\r\n            \"quantity\": 140\r\n        },\r\n        {\r\n            \"product\": \"66ebbbbde2b08ca1b5545f45\",\r\n            \"quantity\": 120\r\n        },\r\n        {\r\n            \"product\": \"66ebbbbde2b08ca1b5545f46\",\r\n            \"quantity\": 200\r\n        },\r\n        {\r\n            \"product\": \"66ebbbbde2b08ca1b5545f47\",\r\n            \"quantity\": 350\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/carts/6719d7123ba3f678ec479300",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"6719d7123ba3f678ec479300"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOTVhMzVhN2E4YjdhM2Y5YTBkNmNkIiwiZmlyc3RfbmFtZSI6IlJvYmVydG8iLCJsYXN0X25hbWUiOiJHb21leiIsImVtYWlsIjoicmdvbWV6QHRlY3Rvcy5jb20ubXgiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE3Mjk3NDE5NzQsImV4cCI6MTcyOTgyODM3NH0.dZK4NQxefsUQds18MSbiREAQ4GVDzdvFe7uwlqe-8HU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantity\": 350\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/carts/6719d7123ba3f678ec479300/product/66ebbbbde2b08ca1b5545f47",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"6719d7123ba3f678ec479300",
+										"product",
+										"66ebbbbde2b08ca1b5545f47"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Purchase Cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjcxOWQ3MTIzYmEzZjY3OGVjNDc5MzAyIiwiZmlyc3RfbmFtZSI6IkFsYXN0YWlyIiwibGFzdF9uYW1lIjoiQmxhY2t3ZWxsIiwiZW1haWwiOiJhbGFzdGFpci5ibGFja3dlbGxAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzI5NzQ2NzMyLCJleHAiOjE3Mjk4MzMxMzJ9.tFgZJPZKA9oqnXEgcUNyKqPaUsU0zQ52LUUZ-tOm-9E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/carts/6719d7123ba3f678ec479300/purchase",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"6719d7123ba3f678ec479300",
+										"purchase"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

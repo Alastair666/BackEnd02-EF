@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator'
+import transport, { generateHTMLTicket } from '../config/mail.config.js'
+import config from '../config/persistence.config.js'
 import CartService from '../services/cart.service.js'
-import ProductService from '../services/product.service.js'
-import OrderService from '../services/order.service.js'
 
 export const getUserCart = async(req,res)=>{
     try {
@@ -19,14 +19,14 @@ export const getUserCart = async(req,res)=>{
     }
     catch (error) {
         console.error(error)
-        res.status(500).json({ result: "error", errors: error })
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }
 export const getCartById = async(req,res)=>{
     console.log(req.params)
     try {
         const cart_cid = req.params.cid
-        console.log(`Cart ID: ${cart_cid}`)
+        //console.log(`Cart ID: ${cart_cid}`)
         if (cart_cid) {
             const cart = await CartService.getCartService().getCartById(cart_cid)
             if (cart) {
@@ -39,14 +39,14 @@ export const getCartById = async(req,res)=>{
     }
     catch (error) {
         console.error(error)
-        res.status(500).json({ result: "error", errors: error })
+        res.status(400).json({ result: "error", errors: error.message })
     }//*/
 }
 export const createUserCart = async(req,res)=>{
     try {
         const errores = validationResult(req);
         if (!errores.isEmpty()) {
-            return res.status(400).json({ result: "error", errors: errores.array() });
+            return res.status(400).json({ result: "error", errors: error.array() });
         }
         const newCart = req.body
         // Insertando producto en BD
@@ -54,7 +54,7 @@ export const createUserCart = async(req,res)=>{
         res.send({ result: "success", payload: result})
     }
     catch (error) {
-        res.status(500).json({ result: "error", errors: error })
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }
 export const putProductsInCart = async(req,res)=>{
@@ -62,7 +62,7 @@ export const putProductsInCart = async(req,res)=>{
         const cart_cid = req.params.cid
         const errores = validationResult(req);
         if (!errores.isEmpty()) {
-            return res.status(400).json({ result: "error", errors: errores.array() });
+            return res.status(400).json({ result: "error", errors: error.array() });
         }
         const productsCart = req.body.products
         // Actualizando productos del carrito
@@ -70,7 +70,8 @@ export const putProductsInCart = async(req,res)=>{
         res.send({ result: "success", payload: result})
     }
     catch (error) {
-        res.status(500).json({ result: "error", errors: error })
+        console.log(error)
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }
 export const putQuantityProductsInCart = async(req,res)=>{
@@ -79,7 +80,7 @@ export const putQuantityProductsInCart = async(req,res)=>{
         const prod_pid = req.params.pid
         const errores = validationResult(req);
         if (!errores.isEmpty()) {
-            return res.status(400).json({ result: "error", errors: errores.array() });
+            return res.status(400).json({ result: "error", errors: error.array() });
         }
         const quantity = req.body.quantity
         // Actualizando productos del carrito
@@ -87,7 +88,7 @@ export const putQuantityProductsInCart = async(req,res)=>{
         res.send({ result: "success", payload: result})
     }
     catch (error) {
-        res.status(500).json({ result: "error", errors: error })
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }
 export const deleteCartProducts = async(req,res)=>{
@@ -95,14 +96,14 @@ export const deleteCartProducts = async(req,res)=>{
         const cart_cid = req.params.cid
         const errores = validationResult(req);
         if (!errores.isEmpty()) {
-            return res.status(400).json({ result: "error", errors: errores.array() });
+            return res.status(400).json({ result: "error", errors: error.array() });
         }
         // Eliminando productos del carrito
         let result = await CartService.getCartService().deleteCartProducts(cart_cid)
         res.send({ result: "success", payload: result})
     }
     catch (error) {
-        res.status(500).json({ result: "error", errors: error })
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }
 export const deleteCartProduct = async(req,res)=>{
@@ -111,24 +112,38 @@ export const deleteCartProduct = async(req,res)=>{
         const prod_pid = req.params.pid
         const errores = validationResult(req);
         if (!errores.isEmpty()) {
-            return res.status(400).json({ result: "error", errors: errores.array() });
+            return res.status(400).json({ result: "error", errors: error.array() });
         }
         // Eliminando producto del carrito
         let result = await CartService.getCartService().deleteCartProduct(cart_cid, prod_pid)
         res.send({ result: "success", payload: result})
     }
     catch (error) {
-        res.status(500).json({ result: "error", errors: error })
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }
 export const purchaseCart = async(req,res)=>{
     try {
-        let products = []
         const cart_cid = req.params.cid
+        let cart = await  CartService.getCartService().purchaseCart(cart_cid)
+        console.log(cart)
+        if (cart) {
+            let result = await transport.sendMail({
+                from: config.sender,
+                to:  cart.t.purchaser,
+                subject: `Ticket #${cart.t.code}`,
+                html: generateHTMLTicket(cart),
+                attachments: []
+            })
+            res.send({ result: "success", payload: cart})
+        }
+
+        /*
+        let products = []
         const cart = await CartService.getCartService().getCartById(cart_cid)
         if (cart) {
             for (const product of cart.products) {
-                let prod = await ProductService.getCartService().getProductById(product.pid)
+                let prod = await ProductService.getProductService().getProductById(product.pid)
                 if (prod) {
                     if (prod.stock >= product.quantity)
                         products.push({ p: prod, c: product })
@@ -142,9 +157,10 @@ export const purchaseCart = async(req,res)=>{
         console.log(products)
         if (products.length > 0){
             //
-        }
+        }//*/
     }
     catch (error) {
-        res.status(500).json({ result: "error", errors: error })
+        console.error(error)
+        res.status(400).json({ result: "error", errors: error.message })
     }
 }

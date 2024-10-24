@@ -1,18 +1,19 @@
 import mongoose from 'mongoose'
+import config from './persistence.config.js'
 import {insertBaseProducts} from '../utils.js'//Configuración Inicial
-import dotenv from 'dotenv'
+//import dotenv from 'dotenv'
 
 // Cargar variables de entorno desde el archivo .env
-dotenv.config({ path: './src/settings.env' });
+//dotenv.config({ path: './src/settings.env' });
 
 const connectDB = async (attempts = 5) =>{
     let connected = false
     let retries = 0
-
+    console.log(config)
     while (!connected && retries < attempts) {
         try {
             // Configura cadena de conexión
-            await mongoose.connect(process.env.MONGODB_URI)
+            await mongoose.connect(config.database)
             console.log('Connected to MongoDB');
             insertBaseProducts()
             connected = true; // Marcamos como conectado si tenemos éxito
@@ -29,8 +30,6 @@ const connectDB = async (attempts = 5) =>{
             }
         }
     }
-
-    
 }
 
 export default connectDB;

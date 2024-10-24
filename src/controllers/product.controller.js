@@ -16,7 +16,7 @@ export const createProduct = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't create the product" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const getProductById = async(req,res)=>{
@@ -29,7 +29,7 @@ export const getProductById = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "No products here" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const getProducts = async(req,res)=>{
@@ -42,7 +42,7 @@ export const getProducts = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "No products here" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const updateProduct = async(req,res)=>{
@@ -62,7 +62,7 @@ export const updateProduct = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't update the product" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const manageStockProduct = async(req,res)=>{
@@ -83,7 +83,7 @@ export const manageStockProduct = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't update the product" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }
 export const deleteProduct = async(req,res)=>{
@@ -97,6 +97,6 @@ export const deleteProduct = async(req,res)=>{
             res.status(400).json({ result: "error", errors: "Can't delete the product" })
     }
     catch (ex){
-        res.status(500).json({ result: "error", errors: ex })
+        res.status(400).json({ result: "error", errors: ex.message })
     }
 }

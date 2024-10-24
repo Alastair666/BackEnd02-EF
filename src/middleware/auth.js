@@ -20,14 +20,14 @@ export const passportCall = (strategy) => {
         passport.authenticate(strategy, function (err, user, info) {
             //console.log(`Error: ${err}\nUser: ${user}\nInfo: ${info}`)
             if (err) {
-                console.log(err)
+                //console.log(err)
                 return next(err)
             }
             if (!user) {
                 return res.status(401).send({ error: info.messages ? info.messages : info.toString() })
             }
             req.user = user
-            console.log(`JWT Authentication!`)
+            //console.log(`JWT Authentication!`)
             //console.log(req.user)
             next()
         })(req, res, next)
