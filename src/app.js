@@ -6,6 +6,7 @@ import passport from 'passport'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 //Configuración Inicial
+import viewsRouter from "./routes/views.route.js"
 import productsRouter from './routes/products.route.js'
 import cartsRouter from "./routes/carts.route.js"
 import usersRouter from "./routes/users.route.js"
@@ -43,6 +44,7 @@ initializePassport()
 app.use(passport.initialize())
 
 // Enlazando rutas para endpoints
+app.use("/", viewsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/api/users", usersRouter)

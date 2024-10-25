@@ -1,0 +1,108 @@
+<div class="card-body m-0 p-3"></div>
+    <h4 class="mb-3">Product List Avaible</h4>
+    <style>
+        .center-both {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+    <table class="table table-bordered table-responsive table-hover">
+        <thead>
+            <tr class="bg-dark">
+                <th scope="col" class="text-grey center-both">Add</th>
+                <th scope="col" class="text-grey">#</th>
+                <th scope="col" class="text-grey">Title</th>
+                <th scope="col" class="text-grey">Description</th>
+                <th scope="col" class="text-grey">Cod. Prod</th>
+                <th scope="col" class="text-grey">Price</th>
+                <th scope="col" class="text-grey">Status</th>
+                <th scope="col" class="text-grey">Stock</th>
+                <th scope="col" class="text-grey">Category</th>
+            </tr>
+        </thead>
+        {{#ifEquals status "success"}}
+        <tbody>
+            {{#each payload}}
+            <tr>
+                <td class="center-both"><button id="{{this._id}}" name="agrega{{this._id}}" value="Agrega" class="btn btn-success mb-1 active-scale-down btn-add-confirm"><i class="fa fa-cart-plus"></i></button> </td>
+                <th scope="row" class="text-end">{{inc @index}}</th>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.status}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.category}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        {{else}}
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        {{/ifEquals}}
+        <tfoot>
+            <tr>
+                <td></td>
+                <td scope="row" class="center-both">
+                    {{#if hasPrevPage}}
+                    <a href={{this.prevLink}}>-Prev: {{this.prevPage}}</a>
+                    {{else}}
+                    <a disabled="disabled">-Prev: </a>
+                    {{/if}}
+                </td>
+                <th scope="row" class="center-both">-Actual: {{this.page}}+</th>
+                <td>
+                    {{#if hasNextPage}}
+                    <a href={{this.nextLink}}>{{this.nextPage}} :Next+</a>
+                    {{else}}
+                    <a disabled="disabled"> :Next+</a>
+                    {{/if}}
+                </td>
+                <th scope="row" class="center-both">Total Pages: {{this.totalPages}}</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <h4>Manage Product</h4>
+    <div class="row">
+        <div class="card-body h-100">
+            <div class="row">
+                <div class="col mb-2">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column justify-content-start m-0 p-3">
+                            <div class="d-flex flex-column">
+                                <div class="text-alternate">Manage <strong>products added</strong> to your shopping cart.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer border-0 p-2 d-flex justify-content-end align-items-right align-items-center">
+            <div class="btn-group m-0 p-0">
+                <input type="submit" name="btnLogOut" value="Log Out" id="btnLogOut" tabindex="2"
+                    class="btn btn-secondary mb-1 active-scale-down">
+            </div>
+            <div class="btn-group m-0 p-0">
+                <input type="submit" name="btnSeeCart" value="See Cart" id="btnSeeCart" tabindex="3"
+                    class="btn btn-success mb-1 active-scale-down">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/tools.js"></script>
+<script src="/js/products.js"></script>

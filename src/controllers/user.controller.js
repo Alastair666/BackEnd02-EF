@@ -76,7 +76,8 @@ export const getLoginUser = async(req, res, next) =>{
             if (!user) 
                 return res.status(401).json({ message: info.message })
             const token = generateToken(user)
-            res.cookie("jwt", token, { httpOnly: true, secure: false })
+            res.cookie("jwt", token, { secure: true, sameSite: 'Strict' }) //httpOnly: true, -- Para que el navegador pueda acceder a la cookie
+
             console.log(`Token en user/login: ${token}`)
             res.send({ status: "success", user: {
                 id: user._id,

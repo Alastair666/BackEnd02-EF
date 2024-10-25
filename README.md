@@ -65,45 +65,81 @@ Para instalar Node.js, sigue estos pasos:
 ### Instalación de Librerías
 1. Una vez que Node.js esté instalado, puedes instalar las librerías necesarias para este proyecto. Ejecuta el siguiente comando en la raíz del proyecto:
     ```sh
-    npm install bcrypt bcryptjs body-parser connect-mongo cookie-parser dotenv express express-handlebars express-session express-validator mongoose mongoose-paginate-v2 passport passport-jwt passport-local
+    npm install
+- En caso de  que se requiera alguna librería adicional, se puede realizar de manera individual como acontinuación se muestra:
+    ```sh
+    npm install bcrypt bcryptjs body-parser connect-mongo cookie-parser dotenv express express-handlebars express-session express-validator jsonwebtoken mongoose mongoose-paginate-v2 nodemailer passport passport-jwt passport-local uuid
 
 ## Estructura del Proyecto
-1. **node_modules/**: Contiene las dependencias del proyecto.
-2. **src/**: Carpeta principal del código fuente.
-3. **config/**: Contiene los archivos de configuración para el acceso a la base de datos.
-4. **data/**: Contiene los archivos de datos.
-5. **middleware/**: Contiene los intermediarios de uso general de la aplicación.
-6. **models/**: Contiene las definiciones de los modelos de las colecciones (Mongo DB).
-4. **public/js/**: Contiene los scripts que se ejecutaran en las vistas (handlebars).
-7. **routes/**: Contiene acceso a las funciones expuestas (endpoints).
-8. **views/**: Contiene las interfaces con las que interactuará el usuario.
+1. **external-resources/**: Contiene el proyecto de POSTMAN para ejecutar los endpoints.
+2. **node_modules/**: Contiene las dependencias del proyecto.
+3. **src/**: Carpeta principal del código fuente.
+4. **config/**: Contiene los archivos de configuración para el acceso a la base de datos.
+5. **controllers/**: Contiene los controladores que gestionaran la lógica ded negocio.
+6. **dao/**: Contiene las clases del acceso de los datos y la clase de gestión de la persistencia de los mismos **(factory.js)**.
+    - **dbclases/**: Contiene las clases de acceso a la base de datos (Mongo).
+    - **models/**: Contiene las definiciones de los modelos de las colecciones (Mongo DB).
+7. **data/**: Contiene los archivos de datos de importación a la base de datos.
+8. **dto/**: Contiene las clases de gestión de la información que se envía a los servicios.
+9. **middleware/**: Contiene los intermediarios de uso general de la aplicación.
+10. **public/js/**: Contiene los scripts que se ejecutaran en las vistas (handlebars).
+11. **repository/**: Contiene los archivos las clases que utilizarán los servicios, estas unifican los métodos de acceso a la base de datos, considerando la capa de persistencia, que a su vez, pueden utilizar la capa de transferencia de datos (DTO).
+12. **routes/**: Contiene acceso a las funciones expuestas (endpoints) que utilizan a los controladores.
+13. **services/**: Contiene los métodos y/ó funciones expuestos .
+14. **views/**: Contiene las interfaces con las que interactuará el usuario.
+    - **layouts/**: Contiene las clases de acceso a la base de datos (Mongo).
 
 - La estructura del proyecto es la siguiente:
     ```
-    BackEnd01_EF/
+    BackEnd02_EF/
+    ├── external-resources/
+    │   ├── BackEnd II - CoderHouse.postman_collection.json
     ├── node_modules/
     ├── src/
     │   ├── config/
     │   ├── ├── database.config.js
+    │   ├── ├── mail.config.js
     │   ├── ├── passport.config.js
+    │   ├── ├── persistence.config.js
+    │   ├── controllers/
+    │   ├── ├── database.config.js
+    │   ├── ├── product.config.js
+    │   ├── ├── ticket.config.js
+    │   ├── ├── user.config.js
+    │   ├── dao/
+    │   ├── ├── dbclasses
+    │   ├── ├── ├── cart.db.js
+    │   ├── ├── ├── order.db.js
+    │   ├── ├── ├── product.db.js
+    │   ├── ├── ├── ticket.db.js
+    │   ├── ├── ├── user.db.js
+    │   ├── ├── models
+    │   ├── ├── ├── cart.model.js
+    │   ├── ├── ├── order.model.js
+    │   ├── ├── ├── product.model.js
+    │   ├── ├── ├── ticket.model.js
+    │   ├── ├── ├── user.model.js
     │   ├── data/
     │   ├── ├── products.json
+    │   ├── dto/
+    │   ├── ├── user.dto.js
     │   ├── middleware/
     │   ├── ├── auth.js
-    │   ├── models/
-    │   ├── ├── cart.model.js
-    │   ├── ├── product.model.js
-    │   ├── ├── user.model.js
     │   ├── public/
     │   ├── ├── js/
     │   ├── ├── ├── carts.js
     │   ├── ├── ├── index.js
     │   ├── ├── ├── products.js
     │   ├── ├── ├── tools.js
+    │   ├── repository/
+    │   ├── ├── cart.repository.js
+    │   ├── ├── order.repository.js
+    │   ├── ├── product.repository.js
+    │   ├── ├── ticket.repository.js
+    │   ├── ├── user.repository.js
     │   ├── routes/
     │   ├── ├── carts.route.js
     │   ├── ├── products.route.js
-    │   ├── ├── sessions.route.js
     │   ├── ├── users.route.js
     │   ├── ├── views.route.js
     │   ├── views/
@@ -114,11 +150,16 @@ Para instalar Node.js, sigue estos pasos:
     │   ├── ├── products.handlebars
     │   ├── ├── users.handlebars
     ├── app.js
+    ├── settings.env
     ├── utils.js
     ├── .gitignore
     ├── package-lock.json
     ├── package.json
     ├── README.md
+
+## Seguridad
+La aplicación utiliza autenticación y autorización mediante JSON Web Tokens (JWT). Los tokens se generan  en el servidor y se envían al cliente, que los almacena en memoria, adicional a esto, los tokens se generan apartir de un secreto que se encuentra en el archivo settings.env junto con los datos del usuario.
+Se utiliza la librería **jsonwebtoken** para la generación y verificación de los tokens, implementada en el archivo auth.js, en conjunto con las estrategias **passport** para la autenticación de usuarios y para gestionar la validación de las acciones  que se pueden realizar en la aplicación, se creo una estrategia basada en los roles de usuario.
 
 ## Endpoints
 A continuación se describen los endpoints disponibles en la aplicación:
@@ -141,11 +182,23 @@ Estos son los endpoint principales que proporcionan una interfaz al usuario
     400 - Bad Request, 500 - Internal Server Error
 
 A continuación se describen cada uno de los endpoints del proyecto:
+#### USERS
+- **GET /api/users/?email** : Obtiene el usuario especificando su email
+- **POST /api/users/** : Inserta el usuario especificando los datos requeridos dentro del body
+- **POST /api/users/register** : Registra los datos del usuario validando que el email sea único.
+- **GET /api/users/failregister** : Ruta alterna en caso de error en register.
+- **POST /api/users/login** : Valida e inicializa acceso a la aplicación.
+- **GET /api/users/faillogin** : Ruta alterna en caso de error en login.
+- **GET /api/users/current** : Devuelve los datos del usuario, validando que este logeado.
+- **GET /api/users/logout** : Termina la sesión del usuario.
+
 #### CARTS
-- **GET /api/carts/:uid** : Obtiene el carrito de un usuario en especifico
-- **POST /api/carts/** : Inserta el carrito indicando el usuario en el cuerpo de la petición
-- **PUT /api/carts/:cid** : Actualiza los productos del carrito especificando un arreglo en el body
-- **PUT /api/carts/:cid/product/:pid** : Actualiza unicamente la cantidad de un producto dentro del carrito
+- **GET /api/carts/user/:uid** : Obtiene el carrito de un usuario en especifico.
+- **GET /api/carts/:cid** : Obtiene el carrito dado un ID en especifico.
+- **POST /api/carts/** : Inserta el carrito indicando el usuario en el cuerpo de la petición.
+- **PUT /api/carts/:cid** : Actualiza los productos del carrito especificando un arreglo en el body.
+- **PUT /api/carts/:cid/product/:pid** : Actualiza unicamente la cantidad de un producto dentro del carrito.
+- **POST /api/carts/:cid/purchase** : Realiza la compra de los productos dentro del carrito.
 - **DELETE /api/carts/:cid** : Elimina todos los productos del carrito solicitado
 - **DELETE /api/carts/:cid/product/:pid** : Elimina un solo producto del carrito solicitado
 
@@ -154,20 +207,15 @@ A continuación se describen cada uno de los endpoints del proyecto:
 - **GET /api/products/:pid** : Obtiene un solo producto especificando su ID
 - **POST /api/products/** : Inserta un producto validando los campos dentro del body
 - **PUT /api/products/:pid** : Actualiza los valores de un producto especificado validando los campos dentro del body
+- **PUT /api/products/:pid/quantity** : Actualiza el sstock del producto dado su ID
 - **DELETE /api/products/:pid** : Elimina el producto especificando su ID
 
-#### SESSIONS
-- **POST /api/session/register** : Registra los datos del usuario validando que el email sea único.
-- **GET /api/session/failregister** : Ruta alterna en caso de error en register.
-- **POST /api/session/login** : Valida e inicializa acceso a la aplicación.
-- **GET /api/session/faillogin** : Ruta alterna en caso de error en login.
-- **GET /api/session/current** : Devuelve los datos del usuario, validando que este logeado.
 
-#### USERS
-- **GET /api/users/?email** : Obtiene el usuario especificando su email
-- **POST /api/users/** : Inserta el usuario especificando los datos requeridos dentro del body
+
+
 
 ## Conclusiones
 - Este proyecto demuestra el uso de Node.js y varias librerías para desarrollar una aplicación backend robusta. Si tienes alguna pregunta o necesitas más información, no dudes en contactarme.
+- Aunque el requirimiento principal es la aplicación backend, se añadieron el uso de los handlebars para la vista al usuario, sin embargo, se pueden realizar los consumos de los endpoints con alguna herramienta  de cliente como Postman o Insomnia (revisar directorio **external-resources**).
     ```
     Este archivo `README.md` proporciona una guía clara y estructurada para la instalación, estructura y uso del proyecto
